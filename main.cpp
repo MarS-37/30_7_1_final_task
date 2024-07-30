@@ -36,114 +36,199 @@ public:
 };
 
 
-// Пул потоков с поддержкой work stealing / Thread pool with work stealing support
+// thread pool with work stealing support
 class ThreadPool
 {
 public:
-	// конструктор, инициализирующий пул потоков / constructor initializing the thread pool
+	// constructor initializing the thread pool
 	explicit ThreadPool(size_t m_threads) : stop(false), workers(m_threads)
 	{
-		// создание потоков / creating threads
+		// creating threads
 		for (size_t i = 0; i < m_threads; ++i) {
-			// привязка потока к функции worker_thread / binding the thread to the worker_thread function
-			workers[i] = std::thread(&ThreadPool::WorkerThread, this, i);
+			// binding the thread to the workerThread function
+			workers[i] = std::thread(&ThreadPool::workerThread, this, i);
 		}
 	}
-	// деструктор, останавливающий пул потоков / destructor stopping the thread pool
+	// destructor stopping the thread pool
 	~ThreadPool()
 	{
-		// установка флага остановки / setting the stop flag
+		// setting the stop flag
 		stop = true;
-		// уведомление всех потоков / notifying all threads
+		// notifying all threads
 		condition.notify_all();
 
-		// ожидание завершения работы потоков / waiting for threads to complete
+		// waiting for threads to complete
 		for (std::thread& worker : workers) {
-			// проверка, можно ли присоединиться к потоку / checking if the thread is joinable
+			// checking if the thread is joinable
 			if (worker.joinable()) {
-				// присоединение к потоку / joining the thread
+				// joining the thread
 				worker.join();
 			}
 		}
 	}
 
 	template <class F, class... Args>
-	// добавление задачи в очередь / adding a task to the queue
-	auto InQueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>
+	// adding a task to the queue
+	auto inQueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>
 	{
-		// определение типа возвращаемого значения задачи / defining the return type of the task
+		// defining the return type of the task
 		using return_type = typename std::invoke_result<F, Args...>::type;
 
-		// создание задачи / creating the task
+		// creating the task
 		auto task = std::make_shared < std::packaged_task<return_type()>(
 			std::bind(std::forward<F>(f), std::forward<Args>(args)...);
 		);
 
 
-		// получение объекта future для задачи / obtaining a future object for the task
+		// obtaining a future object for the task
 		std::future<return_type> res = task->get_future();
 		{
-			// проверка флага остановки / checking the stop flag
+			// checking the stop flag
 			if (stop) {
-				// исключение, если пул потоков остановлен / exception if the thread pool is stopped
+				// exception if the thread pool is stopped
 				throw std::runtime_error()
 			}
 
-			// добавление задачи в очередь / adding the task to the queue
+			// adding the task to the queue
 			tasks.emplace([task]() { (*task)(); });
 		}
 
-		// уведомление одного из потоков о новой задаче / notifying one thread about the new task
+		// notifying one thread about the new task
 		condition.notify_one();
 
 
-		// возвращение future / returning the future
+		// returning the future
 		return res;
 	}
 
 private:
-	// функция, выполняемая каждым потоком / function executed by each thread
-	void WorkerThread(size_t index)
+	// function executed by each thread
+	void workerThread(size_t index)
 	{
-		// бесконечный цикл / infinite loop
+		// infinite loop
 		while (true) {
-			// объект для хранения задачи / object to store the task
+			// object to store the task
 			std::function<void()> task;
 
 			{
-				// захват мьютекса для доступа к очереди / locking the mutex to access the queue
+				// locking the mutex to access the queue
 				std::unique_lock<std::mutex> lock(queue_mutex);
-				// ожидание сигнала или наличия задач / waiting for signal or tasks
+				// waiting for signal or tasks
 				condition.wait(lock, [this] { return stop || !tasks.empty(); });
 
-				// если остановка и задачи завершены / if stopped and tasks are done
+				// if stopped and tasks are done
 				if (stop && tasks.front()) {
-					// выход из потока / exiting the thread
+					// exiting the thread
 					return;
 				}
 
-				// получение задачи из очереди / getting the task from the queue
+				// getting the task from the queue
 				task = std::move(tasks.front());
-				// удаление задачи из очереди / removing the task from the queue
+				// removing the task from the queue
 				tasks.pop();
 			}
 
-			// если задача существует / if the task exists
+			// if the task exists
 			if (task) {
-				// выполнение задачи / executing the task
+				// executing the task
 				task();
 			}
 		}
 	}
 
-	// вектор потоков / vector of threads
+	// vector of threads
 	std::vector<std::thread> workers;
-	// очередь задач / queue of tasks
+	// queue of tasks
 	std::queue<std::function<void()>> tasks;
-	// мьютекс для синхронизации доступа к очереди задач / mutex to synchronize access to the task queue
+	// mutex to synchronize access to the task queue
 	std::mutex queue_mutex;
-	// условная переменная для уведомления потоков / condition variable for notifying threads
+	// condition variable for notifying threads
 	std::condition_variable condition;
-	// флаг остановки пул потоков / flag to stop the thread pool
+	// flag to stop the thread pool
 	bool stop;
 };
+
+
+// multithreaded quicksort
+void quicksort(std::vector<int>& data, int left, int right, std::shared_ptr<std::atomic<int>> remaining_tasks, ThreadPool& pool, std::shared_ptr<std::promise<void>> promise)
+{
+	// base case for recursion termination
+	if (left >= right) {
+		// if all tasks are done
+		if (--(*remaining_tasks) == 0) {
+			// setting the promise value
+			promise->set_value();
+		}
+
+		// exiting the function
+		return;
+	}
+
+	// selecting the pivot element
+	int pivot = data[right];
+	// index for partitioning elements
+	int i = left - 1;
+
+	// loop over array elements
+	for (int j = left; j <= right - 1; ++j) {
+		// if element is less than or equal to pivot
+		if (data[j] <= pivot) {
+			// increment index i
+			++i;
+			// swap elements
+			std::swap(data[i], data[j]);
+		}
+	}
+
+	// placing the pivot element at the correct position
+	std::swap(data[i + 1], data[right]);
+	
+	// index of the pivot element
+	int part_index = i + 1;
+
+	// counting remaining tasks
+	(*remaining_tasks) += 2;
+
+	// promise for the left part
+	auto left_promise = std::make_shared<std::promise<void>>();
+	// promise for the right part
+	auto right_promise = std::make_shared<std::promise<void>>();
+	// future to wait for the left part
+	auto left_future = left_promise->get_future();
+	// future to wait for the right part
+	auto right_future = right_promise->get_future();
+
+	// if the left part is larger than a threshold
+	if (part_index - 1 - left > 100000) {
+		// start sorting in a new thread
+		pool.inQueue(quicksort, std::ref(data), left, part_index - 1, remaining_tasks, std::ref(pool), left_promise);
+	}
+	else {
+		// sorting in the current thread
+		quicksort(data, left, part_index - 1, remaining_tasks, pool, left_promise);
+	}
+
+	// if the right part is larger than a threshold
+	if (right - part_index > 100000) {
+		// start sorting in a new thread
+		pool.inQueue(quicksort, std::ref(data), part_index + 1, right, remaining_tasks, std::ref(pool), right_promise);
+	}
+	else {
+		// sorting in the current thread
+		quicksort(data, part_index + 1, right, remaining_tasks, pool, right_promise);
+	}
+
+	// creating a thread to wait for completion
+	std::thread([left_future = std::move(left_future), right_future = std::move(right_future), remaining_tasks, promise]() mutable {
+		// waiting for the left part to complete
+		left_future.wait();
+		// waiting for the right part to complete
+		right_future.wait();
+
+		// if all tasks are done
+		if (--(*remaining_tasks) == 0) {
+			// setting the promise value
+			promise->set_value();
+		}
+	}).detach(); // detaching the thread
+}
