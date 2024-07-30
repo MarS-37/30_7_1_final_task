@@ -1,4 +1,5 @@
 #include <condition_variable>
+#include <iostream>
 #include <vector>
 #include <random>
 #include <thread>
@@ -231,4 +232,68 @@ void quicksort(std::vector<int>& data, int left, int right, std::shared_ptr<std:
 			promise->set_value();
 		}
 	}).detach(); // detaching the thread
+}
+
+
+int main()
+{
+	// parameters
+	int size = 1'000'000; // size of the array
+	int min_value = -1'000; // minimum random number value
+	int max_value = 4'000; // maximum random number value
+	auto ccore = std::thread::hardware_concurrency(); // number of available hardware threads
+
+	std::cout << "Array size: " << size << std::endl; // outputting the array size
+	std::cout << "Min value: " << min_value << std::endl; // outputting the minimum value
+	std::cout << "Max value: " << max_value << std::endl; // outputting the maximum value
+	std::cout << "Number of threads: " << ccore << std::endl; // outputting the number of threads
+
+	// generating the data array
+	// creating and filling the array with random numbers
+	std::vector<int> data = PayloadGenerator::generate(size, min_value, max_value);
+
+	// creating the thread pool
+	// initializing the thread pool with the number of threads equal to the number of CPU cores
+	ThreadPool pool(ccore);
+
+	// starting the time measurement
+	// start the time counter
+	auto start = std::chrono::high_resolution_clock::now();
+
+	// main promise for waiting for sorting completion
+	auto main_promise = std::make_shared<std::promise<void>>();
+	// future for the main promise
+	auto main_future = main_promise->get_future();
+	// starting the multithreaded quicksort
+	// atomic counter for remaining tasks
+	auto remaining_tasks = std::make_shared<std::atomic<int>>(1);
+
+	// starting the sorting
+	quicksort(data, 0, static_cast<int>(data.size() - 1), remaining_tasks, pool, main_promise);
+
+	// waiting for all tasks to complete
+	main_future.wait();
+
+	// end of time measurement
+	// stopping the time counter
+	auto end = std::chrono::high_resolution_clock::now();
+	// calculating the elapsed time
+	std::chrono::duration<double> elapsed = end - start;
+	// outputting the elapsed time
+	std::cout << "Elapsed time: " << elapsed.count() << " seconds" << std::endl;
+
+	// checking if the array is sorted
+	// checking if the array is sorted
+	if (std::is_sorted(data.begin(), data.end())) {
+		// outputting a message about successful sorting
+		std::cout << "Array is sorted." << std::endl;
+	}
+	else {
+		// outputting a message about unsuccessful sorting
+		std::cout << "Array is NOT sorted." << std::endl;
+	}
+
+
+	// exiting the program
+	return 0;
 }
