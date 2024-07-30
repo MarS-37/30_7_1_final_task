@@ -1,2 +1,3 @@
-# 30_7_1_final_task
-Final assignment 30.7.1 (HW-04)
+# Итоговое задание 30.7.1 (Final assignment 30.7.1 (HW-04))
+
+# ПРОТЕСТИРОВАНА: MSVC v.143 - VS 2022 C++ 86/64
