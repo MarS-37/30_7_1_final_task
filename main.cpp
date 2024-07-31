@@ -1,3 +1,12 @@
+//+------------------------------------------------------------------+
+//|                      30.7.1 Final assignment                     |
+//|                                                                  |
+//|              TESTED: MSVC v.143 - VS 2022 C++ 86/64              |
+//|                                                                  |
+//|           https:https://github.com/MarS-37/30_7_1_final_task.git |
+//|                                       markin.sergey.37@yandex.ru |
+//+------------------------------------------------------------------+
+
 #include <condition_variable>
 #include <iostream>
 #include <vector>
@@ -143,10 +152,9 @@ private:
 };
 
 
-// Multithreaded quicksort
+// multithreaded quicksort / функция многопоточной быстрой сортировки
 void quicksort(std::vector<int>& data, int left, int right, std::shared_ptr<std::atomic<int>> remaining_tasks, ThreadPool& pool, std::shared_ptr<std::promise<void>> promise)
 {
-
     // base case for recursion termination
     if (left >= right) {
         // if all tasks are done
@@ -187,7 +195,6 @@ void quicksort(std::vector<int>& data, int left, int right, std::shared_ptr<std:
     auto left_promise = std::make_shared<std::promise<void>>();
     // promise for the right part
     auto right_promise = std::make_shared<std::promise<void>>();
-
     // future to wait for the left part
     auto left_future = left_promise->get_future();
     // future to wait for the right part
@@ -219,6 +226,7 @@ void quicksort(std::vector<int>& data, int left, int right, std::shared_ptr<std:
         left_future.wait();
         // waiting for the right part to complete
         right_future.wait();
+
         // if all tasks are done
         if (--(*remaining_tasks) == 0) {
             // setting the promise value
