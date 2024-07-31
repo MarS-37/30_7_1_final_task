@@ -1,0 +1,4 @@
+main.a1:Debug|Win32:C:/PortableGit/GitHub/30_7_1_final_task/main.cpp
+main.a2:Release|Win32:C:/PortableGit/GitHub/30_7_1_final_task/main.cpp
+main.a3:Debug|x64:C:/PortableGit/GitHub/30_7_1_final_task/main.cpp
+main.a4:Release|x64:C:/PortableGit/GitHub/30_7_1_final_task/main.cpp

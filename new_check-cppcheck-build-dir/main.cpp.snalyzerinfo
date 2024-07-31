@@ -1,0 +1,7 @@
+generate call:[begin,data,dis,end,gen,generate,rd] noreturn:[dis]
+ThreadPool call:[thread] noreturn:[thread]
+ThreadPool call:[join,joinable,notify_all] noreturn:[join]
+enqueue call:[bind,emplace,get_future,lock,notify_one,return_type,runtime_error] noreturn:[emplace,runtime_error]
+worker_thread call:[empty,front,lock,move,pop,task,void,wait] noreturn:[empty,pop,task]
+quicksort call:[detach,enqueue,get_future,move,quicksort,ref,set_value,swap,thread,wait] noreturn:[detach,enqueue,quicksort,set_value,swap]
+main call:[begin,count,end,generate,get_future,hardware_concurrency,is_sorted,now,pool,quicksort,size,wait]

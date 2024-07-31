@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="6701256587927491639">
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;condition_variable&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;condition_variable&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="1" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;iostream&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;iostream&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="2" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;vector&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;vector&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="3" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;random&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;random&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="4" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;memory&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;memory&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="5" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;future&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;future&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="6" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;thread&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;thread&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="7" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;atomic&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;atomic&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="8" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;chrono&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;chrono&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="9" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;mutex&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;mutex&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="10" column="0"/>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Include file: &lt;queue&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results." verbose="Include file: &lt;queue&gt; not found. Please note: Cppcheck does not need standard library headers to get proper results.">
+            <location file="C:\PortableGit\GitHub\30_7_1_final_task\main.cpp" line="11" column="0"/>
+        </error>
+  <FileInfo check="ctu">
+<function-call call-id="C:/PortableGit/GitHub/30_7_1_final_task/main.cpp:96:6" call-funcname="quicksort" call-argnr="2" file="C:/PortableGit/GitHub/30_7_1_final_task/main.cpp" line="175" col="14" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/>  </FileInfo>
+  <FileInfo check="Class">
+<class name="PayloadGenerator" file="C:/PortableGit/GitHub/30_7_1_final_task/main.cpp" line="15" col="1" hash="9933804906961488156"/>
+<class name="ThreadPool" file="C:/PortableGit/GitHub/30_7_1_final_task/main.cpp" line="31" col="1" hash="14985669186499426051"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="generate" lineNumber="17"/>
+    <functiondecl functionName="enqueue" lineNumber="50"/>
+    <functiondecl functionName="worker_thread" lineNumber="68"/>
+    <functiondecl functionName="quicksort" lineNumber="96"/>
+    <functiondecl functionName="main" lineNumber="149"/>
+    <functioncall functionName="Args"/>
+    <functioncall functionName="F"/>
+    <functioncall functionName="atomic"/>
+    <functioncall functionName="begin"/>
+    <functioncall functionName="bind"/>
+    <functioncall functionName="count"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="detach"/>
+    <functioncall functionName="dis"/>
+    <functioncall functionName="emplace"/>
+    <functioncall functionName="empty"/>
+    <functioncall functionName="end"/>
+    <functioncall functionName="enqueue"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="forward"/>
+    <functioncall functionName="front"/>
+    <functioncall functionName="function"/>
+    <functioncall functionName="gen"/>
+    <functioncall functionName="generate"/>
+    <functioncall functionName="get_future"/>
+    <functioncall functionName="hardware_concurrency"/>
+    <functioncall functionName="invoke_result"/>
+    <functioncall functionName="is_sorted"/>
+    <functioncall functionName="join"/>
+    <functioncall functionName="joinable"/>
+    <functioncall functionName="lock"/>
+    <functioncall functionName="make_shared"/>
+    <functioncall functionName="move"/>
+    <functioncall functionName="mutex"/>
+    <functioncall functionName="notify_all"/>
+    <functioncall functionName="notify_one"/>
+    <functioncall functionName="now"/>
+    <functioncall functionName="packaged_task"/>
+    <functioncall functionName="pool"/>
+    <functioncall functionName="pop"/>
+    <functioncall functionName="promise"/>
+    <functioncall functionName="quicksort"/>
+    <functioncall functionName="rd"/>
+    <functioncall functionName="ref"/>
+    <functioncall functionName="return_type"/>
+    <functioncall functionName="runtime_error"/>
+    <functioncall functionName="set_value"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="swap"/>
+    <functioncall functionName="task"/>
+    <functioncall functionName="thread"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="wait"/>
+    <functioncall functionName="worker_thread"/>
+  </FileInfo>
+</analyzerinfo>
